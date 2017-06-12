@@ -312,7 +312,9 @@ public abstract class QSTile<TState extends State> {
     protected abstract void setListening(boolean listening);
 
     protected void handleDestroy() {
-        setListening(false);
+        if (mListeners.size() != 0) {
+            setListening(false);
+        }
         mCallbacks.clear();
     }
 
@@ -486,10 +488,19 @@ public abstract class QSTile<TState extends State> {
         public Drawable getDrawable(Context context) {
             return mDrawable;
         }
+    }
+
+    public static class DrawableIconWithRes extends DrawableIcon {
+        private final int mId;
+
+        public DrawableIconWithRes(Drawable drawable, int id) {
+            super(drawable);
+            mId = id;
+        }
 
         @Override
-        public Drawable getInvisibleDrawable(Context context) {
-            return mDrawable;
+        public boolean equals(Object o) {
+            return o instanceof DrawableIconWithRes && ((DrawableIconWithRes) o).mId == mId;
         }
     }
 
